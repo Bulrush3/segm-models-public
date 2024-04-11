@@ -109,7 +109,7 @@ class SegmentationTrainer:
 
         self.valid_loader['weight'] /= num_elements
 
-        self._loss = smp_utils.losses.JaccardLoss()
+        self._loss = nn.BCELoss()
         self._metrics = [
             smp_utils.metrics.IoU(threshold=0.5),
         ]
@@ -180,7 +180,7 @@ class SegmentationTrainer:
             if not self.use_only_add_val:  # если в списке есть основной val набор считаем iou по нему
                 valid_logs = self._valid_epoch.run(self.valid_loader['set'])
                 writer.add_scalar(self.valid_loader['name'] + ' iou', valid_logs['iou_score'], i)
-                writer.add_scalar(self.valid_loader['name'] + ' loss', valid_logs['jaccard_loss'], i)
+                writer.add_scalar(self.valid_loader['name'] + ' loss', valid_logs['BCE_loss'], i)
                 val_iou = valid_logs['iou_score']
                 if self.valid_loader_list is not None:
                     mean_val_iou += valid_logs['iou_score'] * self.valid_loader['weight']
@@ -191,7 +191,7 @@ class SegmentationTrainer:
                     for loader in self.valid_loader_list:
                         valid_logs = self._valid_epoch.run(loader['set'])
                         writer.add_scalar(loader['name'] + ' iou', valid_logs['iou_score'], i)
-                        writer.add_scalar(loader['name'] + ' loss', valid_logs['jaccard_loss'], i)
+                        writer.add_scalar(loader['name'] + ' loss', valid_logs['BCE_loss'], i)
                         mean_val_iou += valid_logs['iou_score'] * loader['weight']
 
             # считаем либо только по основному набору либо только по доп. наборам
