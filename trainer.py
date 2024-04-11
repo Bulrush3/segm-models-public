@@ -109,7 +109,7 @@ class SegmentationTrainer:
 
         self.valid_loader['weight'] /= num_elements
 
-        self._loss = nn.BCEWithLogitsLoss()
+        self._loss = smp.utils.BCEWithLogitsLoss()
         self._metrics = [
             smp_utils.metrics.IoU(threshold=0.5),
         ]
