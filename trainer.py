@@ -175,7 +175,7 @@ class SegmentationTrainer:
 
             train_logs = self._train_epoch.run(self._train_loader)
             writer.add_scalar('Accuracy/train', train_logs['iou_score'], i)
-            writer.add_scalar('Loss/train', train_logs['_loss'], i)
+            writer.add_scalar('Loss/train', train_logs['BCE_loss'], i)
 
             if not self.use_only_add_val:  # если в списке есть основной val набор считаем iou по нему
                 valid_logs = self._valid_epoch.run(self.valid_loader['set'])
